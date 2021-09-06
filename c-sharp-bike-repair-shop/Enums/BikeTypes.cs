@@ -1,6 +1,6 @@
 ﻿namespace BikeRepairShop.Enums
 {
-    public enum BikeTypes
+    public enum MachineTypes
     {
         Road,
         Mountain,

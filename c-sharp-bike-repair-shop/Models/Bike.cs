@@ -5,41 +5,28 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Bike
+    public class Bike : IMachine
     {
-        private Bike(BikeTypes bikeType, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
+        public string GenericMachineName => "Bike";
+
+        public string GenericMachineMovementMethod => "Ride";
+
+        public MachineTypes MachineType { get; }
+
+        public DateTime? DateLastMaintained { get; }
+
+        public Dictionary<Components, Condition> Parts { get; set; }
+
+        private Bike(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
         {
-            Type = bikeType;
+            MachineType = type;
             Parts = parts;
             DateLastMaintained = lastMaintained;
         }
 
-        public static Bike Create(BikeTypes bikeType, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
+        public static Bike Create(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
         {
-            return new Bike(bikeType, parts, lastMaintained);
-        }
-
-        public DateTime? DateLastMaintained { get; set; }
-
-        public BikeTypes Type { get; set; }
-
-        public Dictionary<Components, Condition> Parts { get; set; }
-
-        public string TestRide()
-        {
-            var conditions = Parts.Values.ToList();
-
-            if (conditions.Contains(Condition.Broken))
-            {
-                return "This bike is broken, I can't ride it like this!";
-            }
-
-            if (conditions.Contains(Condition.Fragile))
-            {
-                return "It's a comfy ride!";
-            }
-
-            return "The bike rides beautifully!";
+            return new Bike(type, parts, lastMaintained);
         }
 
         public string RingBell()

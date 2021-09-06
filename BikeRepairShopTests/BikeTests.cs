@@ -7,7 +7,7 @@ namespace BikeRepairShopTests
 
     public class BikeTests
     {
-        private const BikeTypes TestType = BikeTypes.Road;
+        private const MachineTypes TestType = MachineTypes.Road;
         private static readonly Dictionary<Components, Condition> TestParts = new Dictionary<Components, Condition>();
         private static readonly Bike TestBike = Bike.Create(TestType, TestParts);
 

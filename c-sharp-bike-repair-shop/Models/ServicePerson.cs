@@ -7,17 +7,17 @@
 
     public class ServicePerson
     {
-        private ServicePerson(Bike bike)
+        private ServicePerson(IMachine bike)
         {
             this.CurrentJob = bike;
         }
 
-        public static ServicePerson Create(Bike bike)
+        public static ServicePerson Create(IMachine bike)
         {
             return new ServicePerson(bike);
         }
 
-        public Bike CurrentJob { get; }
+        public IMachine CurrentJob { get; }
 
         public void CheckUp()
         {
@@ -103,7 +103,10 @@
 
         private void CompleteCheckUp()
         {
-            Console.WriteLine(CurrentJob.RingBell());
+            if (CurrentJob is Bike job)
+            {
+                Console.WriteLine(job.RingBell());
+            }
         }
     }
 }
