@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c-sharp-bike-repair-shop", "c-sharp-bike-repair-shop\c-sharp-bike-repair-shop.csproj", "{07431E5C-3C9E-431C-8CBC-2694D967000F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeRepairShop", "c-sharp-bike-repair-shop\BikeRepairShop.csproj", "{07431E5C-3C9E-431C-8CBC-2694D967000F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeRepairShopTests", "BikeRepairShopTests\BikeRepairShopTests.csproj", "{3F2E1913-534B-418F-BC8D-0513C93E2E25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{07431E5C-3C9E-431C-8CBC-2694D967000F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07431E5C-3C9E-431C-8CBC-2694D967000F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07431E5C-3C9E-431C-8CBC-2694D967000F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F2E1913-534B-418F-BC8D-0513C93E2E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2E1913-534B-418F-BC8D-0513C93E2E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2E1913-534B-418F-BC8D-0513C93E2E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2E1913-534B-418F-BC8D-0513C93E2E25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
