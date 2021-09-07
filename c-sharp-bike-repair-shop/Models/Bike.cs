@@ -5,29 +5,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Bike : IMachine
+    public class Bike : Machine
     {
-        public string GenericMachineName => "Bike";
+        protected override string GenericMachineName => "bike";
 
-        public string GenericMachineMovementMethod => "Ride";
-
-        public MachineTypes MachineType { get; }
-
-        public DateTime? DateLastMaintained { get; }
-
-        public Dictionary<Components, Condition> Parts { get; set; }
-
-        private Bike(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
-        {
-            MachineType = type;
-            Parts = parts;
-            DateLastMaintained = lastMaintained;
-        }
-
-        public static Bike Create(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
-        {
-            return new Bike(type, parts, lastMaintained);
-        }
+        protected override string GenericMachineMovementMethod => "ride";
 
         public string RingBell()
         {
@@ -44,6 +26,18 @@
             }
 
             return "Ring!Ring!Ring!";
+        }
+
+        public Bike(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null) : base(type, parts, lastMaintained)
+        {
+            MachineType = type;
+            Parts = parts;
+            DateLastMaintained = lastMaintained;
+        }
+
+        public static Bike Create(MachineTypes machineType, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
+        {
+            return new Bike(machineType, parts, lastMaintained);
         }
     }
 }

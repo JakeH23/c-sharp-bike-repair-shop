@@ -1,54 +1,48 @@
 ﻿namespace BikeRepairShop.Models
 {
-    using System;
-    using System.Linq;
-    using System.Threading;
     using BikeRepairShop.Enums;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class ServicePerson
     {
-        private ServicePerson(IMachine bike)
+        private ServicePerson(Machine bike)
         {
             this.CurrentJob = bike;
         }
 
-        public static ServicePerson Create(IMachine bike)
+        public static ServicePerson Create(Machine bike)
         {
             return new ServicePerson(bike);
         }
 
-        public IMachine CurrentJob { get; }
+        public Machine CurrentJob { get; }
 
         public void CheckUp()
         {
-            Thread brokenThread = null;
+            var tasks = new List<Task>();
             if (CurrentJob.Parts.ContainsValue(Condition.Broken))
             {
-                brokenThread = new Thread(OrderSpareParts);
+                tasks.Add(Task.Run(OrderSpareParts));
             }
 
-            Thread fragileThread = null;
             if (CurrentJob.Parts.ContainsValue(Condition.Fragile))
             {
-                fragileThread = new Thread(FixUpParts);
+                tasks.Add(Task.Run(FixUpParts));
             }
 
-            var serviceThread = new Thread(ServiceBike);
-            var checkUpCompleteThread = new Thread(CompleteCheckUp);
+            tasks.Add(Task.Run(ServiceBike));
 
-            brokenThread?.Start();
-            fragileThread?.Start();
-            serviceThread.Start();
+            Task.WaitAll(tasks.ToArray());
 
-            brokenThread?.Join();
-            fragileThread?.Join();
-            serviceThread.Join();
-            checkUpCompleteThread.Start();
+            CompleteCheckUp();
         }
 
         private void OrderSpareParts()
         {
-            Thread.Sleep(5000);
+            Task.Delay(5000);
             var brokenParts = CurrentJob.Parts.Where(x => x.Value == Condition.Broken).Select(x => x.Key);
 
             foreach (var part in brokenParts)
@@ -62,7 +56,7 @@
             var fragileParts = CurrentJob.Parts.Where(x => x.Value == Condition.Fragile).Select(x => x.Key);
             var timeOfJob = fragileParts.Sum(part => 1000);
 
-            Thread.Sleep(timeOfJob);
+            Task.Delay(timeOfJob);
 
             foreach (var part in fragileParts)
             {
@@ -72,32 +66,28 @@
 
         private void ServiceBike()
         {
-            var oilThread = new Thread(Oil);
-            var cleanThread = new Thread(Clean);
-            var pumpWheelsThread = new Thread(PumpWheels);
-
-            pumpWheelsThread.Start();
-            oilThread.Start();
-            oilThread.Join();
-            cleanThread.Start();
+            Task.Run(PumpWheels);
+            var oilTask = Task.Run(Oil);
+            var awaiter = oilTask.GetAwaiter();
+            awaiter.OnCompleted(Clean);
         }
 
         private void Oil()
         {
-            Thread.Sleep(500);
+            Task.Delay(500);
             CurrentJob.Parts[Components.Breaks] = Condition.Pristine;
             CurrentJob.Parts[Components.Gears] = Condition.Pristine;
         }
 
         private void Clean()
         {
-            Thread.Sleep(500);
+            Task.Delay(500);
             CurrentJob.Parts[Components.Frame] = Condition.Pristine;
         }
 
         private void PumpWheels()
         {
-            Thread.Sleep(500);
+            Task.Delay(500);
             CurrentJob.Parts[Components.Tyres] = Condition.Pristine;
         }
 
