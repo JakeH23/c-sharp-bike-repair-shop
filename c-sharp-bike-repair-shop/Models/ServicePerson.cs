@@ -8,14 +8,14 @@
 
     public class ServicePerson
     {
-        private ServicePerson(Machine bike)
+        private ServicePerson(Machine machine)
         {
-            this.CurrentJob = bike;
+            this.CurrentJob = machine;
         }
 
-        public static ServicePerson Create(Machine bike)
+        public static ServicePerson Create(Machine machine)
         {
-            return new ServicePerson(bike);
+            return new ServicePerson(machine);
         }
 
         public Machine CurrentJob { get; }
@@ -33,7 +33,7 @@
                 tasks.Add(FixUpParts());
             }
 
-            tasks.Add(ServiceBike());
+            tasks.Add(ServiceMachine());
             Task.WaitAll(tasks.ToArray());
 
             CompleteCheckUp();
@@ -70,7 +70,7 @@
             return electronics != null && CurrentJob.MachineType == MachineTypes.Cyclocross;
         }
 
-        private async Task ServiceBike()
+        private async Task ServiceMachine()
         {
             PumpWheels();
             if (HasElectronics())
@@ -108,9 +108,14 @@
 
         private void CompleteCheckUp()
         {
-            if (CurrentJob is Bike job)
+            switch (CurrentJob)
             {
-                Console.WriteLine(job.RingBell());
+                case Bike bike:
+                    Console.WriteLine(bike.RingBell());
+                    break;
+                case Car car:
+                    Console.WriteLine(car.TootHorn());
+                    break;
             }
         }
     }
