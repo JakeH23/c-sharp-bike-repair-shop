@@ -28,15 +28,22 @@
             return "Ring!Ring!Ring!";
         }
 
-        public Bike(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null) : base(type, parts, lastMaintained)
+        private Bike(MachineTypes type, Dictionary<Components, Condition?> parts, DateTime? lastMaintained = null) : base(type, parts, lastMaintained)
         {
             MachineType = type;
             Parts = parts;
             DateLastMaintained = lastMaintained;
         }
 
-        public static Bike Create(MachineTypes machineType, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
+        public static Bike Create(MachineTypes machineType, Dictionary<Components, Condition?> parts, DateTime? lastMaintained = null)
         {
+            if (machineType == MachineTypes.Cyclocross)
+            {
+                if (!parts.ContainsKey(Components.Electronics))
+                {
+                    parts.Add(Components.Electronics, null);
+                }
+            }
             return new Bike(machineType, parts, lastMaintained);
         }
     }

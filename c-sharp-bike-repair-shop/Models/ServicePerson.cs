@@ -25,58 +25,67 @@
             var tasks = new List<Task>();
             if (CurrentJob.Parts.ContainsValue(Condition.Broken))
             {
-                tasks.Add(Task.Run(OrderSpareParts));
+                tasks.Add(OrderSpareParts());
             }
 
             if (CurrentJob.Parts.ContainsValue(Condition.Fragile))
             {
-                tasks.Add(Task.Run(FixUpParts));
+                tasks.Add(FixUpParts());
             }
 
-            tasks.Add(Task.Run(ServiceBike));
-
+            tasks.Add(ServiceBike());
             Task.WaitAll(tasks.ToArray());
 
             CompleteCheckUp();
         }
 
-        private void OrderSpareParts()
+        private Task OrderSpareParts()
         {
-            Task.Delay(5000);
-            var brokenParts = CurrentJob.Parts.Where(x => x.Value == Condition.Broken).Select(x => x.Key);
+            var brokenParts = CurrentJob.Parts.Where(x => x.Value == Condition.Broken).Select(x => x.Key).ToList();
 
             foreach (var part in brokenParts)
             {
                 CurrentJob.Parts[part] = Condition.Fragile;
             }
+
+            return Task.Run(() => Task.Delay(5000));
         }
 
-        private void FixUpParts()
+        private Task FixUpParts()
         {
-            var fragileParts = CurrentJob.Parts.Where(x => x.Value == Condition.Fragile).Select(x => x.Key);
+            var fragileParts = CurrentJob.Parts.Where(x => x.Value == Condition.Fragile).Select(x => x.Key).ToList();
             var timeOfJob = fragileParts.Sum(part => 1000);
-
-            Task.Delay(timeOfJob);
 
             foreach (var part in fragileParts)
             {
                 CurrentJob.Parts[part] = Condition.Fine;
             }
+
+            return Task.Run(() => Task.Delay(timeOfJob));
         }
 
-        private void ServiceBike()
+        private bool HasElectronics()
         {
-            Task.Run(PumpWheels);
-            var oilTask = Task.Run(Oil);
-            var awaiter = oilTask.GetAwaiter();
-            awaiter.OnCompleted(Clean);
+            var electronics = CurrentJob.Parts.FirstOrDefault(x => x.Key == Components.Electronics).Value;
+            return electronics != null && CurrentJob.MachineType == MachineTypes.Cyclocross;
         }
 
-        private void Oil()
+        private async Task ServiceBike()
         {
-            Task.Delay(500);
+            PumpWheels();
+            if (HasElectronics())
+            {
+                FixElectronics();
+            }
+            await Oil();
+            Clean();
+        }
+
+        private Task Oil()
+        {
             CurrentJob.Parts[Components.Breaks] = Condition.Pristine;
             CurrentJob.Parts[Components.Gears] = Condition.Pristine;
+            return Task.Run(() => Task.Delay(500));
         }
 
         private void Clean()
@@ -89,6 +98,12 @@
         {
             Task.Delay(500);
             CurrentJob.Parts[Components.Tyres] = Condition.Pristine;
+        }
+
+        private void FixElectronics()
+        {
+            Task.Delay(500);
+            CurrentJob.Parts[Components.Electronics] = Condition.Pristine;
         }
 
         private void CompleteCheckUp()

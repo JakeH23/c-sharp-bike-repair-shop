@@ -11,11 +11,11 @@
 
         protected abstract string GenericMachineMovementMethod { get; }
 
-        public DateTime? DateLastMaintained { get; set; }
+        protected DateTime? DateLastMaintained { get; set; }
 
-        public MachineTypes MachineType { get; set; }
+        public MachineTypes MachineType { get; protected set; }
 
-        public Dictionary<Components, Condition> Parts { get; set; }
+        public Dictionary<Components, Condition?> Parts { get; set; }
 
         public string TestRide()
         {
@@ -34,7 +34,7 @@
             return $"The {GenericMachineName} {GenericMachineMovementMethod}s beautifully!";
         }
 
-        protected Machine(MachineTypes type, Dictionary<Components, Condition> parts, DateTime? lastMaintained = null)
+        protected Machine(MachineTypes type, Dictionary<Components, Condition?> parts, DateTime? lastMaintained = null)
         {
             MachineType = type;
             Parts = parts;

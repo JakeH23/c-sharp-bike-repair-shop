@@ -5,6 +5,11 @@
         Road,
         Mountain,
         Hybrid,
-        Folding
+        Folding,
+        Cyclocross,
+        Hatchback,
+        Suv,
+        FourByFour,
+        Electric
     }
 }

@@ -5,6 +5,7 @@
         Gears,
         Breaks,
         Frame,
-        Tyres
+        Tyres,
+        Electronics
     }
 }
