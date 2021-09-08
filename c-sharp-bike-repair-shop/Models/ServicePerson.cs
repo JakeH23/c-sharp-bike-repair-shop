@@ -20,7 +20,7 @@
 
         public Machine CurrentJob { get; }
 
-        public void CheckUp()
+        public async Task CheckUp()
         {
             var tasks = new List<Task>();
             if (CurrentJob.Parts.ContainsValue(Condition.Broken))
@@ -34,7 +34,7 @@
             }
 
             tasks.Add(ServiceMachine());
-            Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks);
 
             CompleteCheckUp();
         }

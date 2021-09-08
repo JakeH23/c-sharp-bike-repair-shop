@@ -1,4 +1,6 @@
-﻿namespace BikeRepairShopTests
+﻿using System.Threading.Tasks;
+
+namespace BikeRepairShopTests
 {
     using BikeRepairShop.Enums;
     using BikeRepairShop.Models;
@@ -14,7 +16,7 @@
         public class CheckUpTests
         {
             [Fact]
-            public void WhenPartsAreInVaryingConditions_ReturnsAllPartsConditionsAsPristine()
+            public async Task WhenPartsAreInVaryingConditions_ReturnsAllPartsConditionsAsPristine()
             {
                 // arrange
                 TestBike.Parts = new Dictionary<Components, Condition?>
@@ -27,7 +29,7 @@
 
                 // act
                 var servicePerson = ServicePerson.Create(TestBike);
-                servicePerson.CheckUp();
+                await servicePerson.CheckUp();
 
                 // assert
                 Assert.Equal(Condition.Pristine, servicePerson.CurrentJob.Parts[Components.Gears]);
